@@ -56,7 +56,7 @@
         "tocTabAvailable": false,
         "layersTabAvailable": false,
         "searchTabAvailable": false,
-        "annotationTabAvailable": false
+        "annotationTabAvailable": true
       },
       "sidePanelVisible" : false, //whether or not to make the side panel visible in this window on load. This setting is dependent on sidePanel being true
       "overlay" : false, //whether or not to make the metadata overlay available/visible in this window
@@ -188,7 +188,10 @@
      *  }
      *  }
      **/
-    'annotationEndpoint': {},
+    'annotationEndpoint': {
+      'name': 'dbStorageEndpoint',
+      'module': 'dbStorageEndpoint'
+    },
 
     'annotationBodyEditor': {
       'module': 'TinyMCEAnnotationBodyEditor',

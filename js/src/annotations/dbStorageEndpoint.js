@@ -47,6 +47,8 @@
       search: function(options, successCallback, errorCallback, stopAfterLookup) {
         var _this = this;
   
+        if (typeof stopAfterLookup === "undefined") { stopAfterLookup = true; }
+
         if (stopAfterLookup)
         {
             this.annotationsList = []; //clear out current list
@@ -298,6 +300,9 @@
       },
   
       getAnnotationList: function(key, options, successCallback, errorCallback) {
+        
+        console.log("Am I here?");
+        
         var _this = this;
         var keyc   = key.split('/');
         var _id    = keyc[keyc.length -1];
