@@ -85,7 +85,7 @@
               };
 
               _this.eventEmitter.publish('onAnnotationCreatedCanceled.'+_this.windowId,[cancelCallback,!_this.activeEditor.isDirty()]);
-
+              jQuery(jQuery('[name=last-tool').val()).trigger('click');
             });
 
             jQuery(selector + ' a.save').on("click", function(event) {
@@ -93,6 +93,16 @@
               if(!params.onSaveClickCheck()){
                 return;
               }
+
+              var value      =  jQuery('.anno-cat :selected').val();
+
+              if (value == 'Please Select') {
+                alert("Please select a tag to start");
+                return false;
+              }
+
+              jQuery('[name=last-tag]').val(value);
+              
               var annotation = _this.activeEditor.createAnnotation();
               if (params.onAnnotationCreated) { params.onAnnotationCreated(annotation); }
 
@@ -264,6 +274,15 @@
         var id = display.attr('data-anno-id');
         var oaAnno = viewerParams.getAnnoFromRegion(id)[0];
 
+        var value      =  jQuery('.anno-cat :selected').val();
+
+        if (value == 'Please Select') {
+          alert("Please select a tag to start");
+          return false;
+        }
+
+        jQuery('[name=last-tag]').val(value);
+        
         _this.activeEditor.updateAnnotation(oaAnno);
         _this.eventEmitter.publish('annotationEditSave.'+_this.windowId,[oaAnno]);
       });
@@ -438,10 +457,14 @@
       '<form id="annotation-editor-{{windowId}}" class="annotation-editor annotation-tooltip" {{#if id}}data-anno-id="{{id}}"{{/if}}>',
       '<div>',
       // need to add a delete, if permissions allow
-      '<div class="button-container">',
-      '<a href="#cancel" class="cancel"><i class="fa fa-times-circle-o fa-fw"></i>{{t "cancel"}}</a>',
-      '<a href="#save" class="save"><i class="fa fa-database fa-fw"></i>{{t "save"}}</a>',
-      '</div>',
+        '<div class="button-container row">',
+          '<div class="col-6">',
+          ' <a href="#cancel" class="cancel btn btn-block secondary-button"><i class="fa fa-times-circle-o fa-fw"></i>{{t "cancel"}}</a>',
+          '</div>',
+          '<div class="col-6">',
+            '<a href="#save" class="save btn btn-block primary-button text-white"><i class="fa fa-database fa-fw"></i>{{t "save"}}</a>',
+          '</div>',
+        '</div>',
       '</div>',
       '</form>'
     ].join('')),

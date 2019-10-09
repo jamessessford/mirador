@@ -8,7 +8,8 @@
       config: {
         plugins: '',
         toolbar: '',
-        tags: []
+        tags: availableTags,
+        allTags: tags
       }
     }, options);
 
@@ -19,7 +20,7 @@
     init: function() {
       var _this = this;
       var annoText = "",
-        selectedTags = [],
+        selectedTags = availableTags,
         tags = [];
       if (!jQuery.isEmptyObject(_this.annotation)) {
         if (jQuery.isArray(_this.annotation.resource)) {
@@ -63,7 +64,7 @@
         setup: function(editor) {
           editor.on('init', function(args) {
             tinymce.execCommand('mceFocus', false, args.target.id);
-            jQuery('.tags-editor').select2({
+            jQuery('.anno-cat').select2({
               tags: true,
               placeholder: "Add tags here..."
               // tokenSeparators: [',', ' ']  // spaces for backward compatibility
@@ -74,76 +75,112 @@
     },
 
     isDirty: function() {
-      return tinymce.activeEditor.isDirty();
+      return false;//tinymce.activeEditor.isDirty();
     },
 
     createAnnotation: function() {
-      var tags = this.editorContainer.find('.tags-editor').val(),
-        resourceText = tinymce.activeEditor.getContent();
+      var tags = this.editorContainer.find('.tags-editor').val();
+        //resourceText = tinymce.activeEditor.getContent();
 
-      var motivation = [],
-        resource = [],
-        on;
+      var annoCat = this.editorContainer.find('.anno-cat').val();
 
-      if (tags && tags.length > 0) {
-        motivation.push("oa:tagging");
-        jQuery.each(tags, function(index, value) {
-          resource.push({
-            "@type": "oa:Tag",
-            "chars": value
+      if (annoCat === 'Please select tag') {
+        alert("Please select a tag to continue");
+        return false;
+      } else {
+        var motivation = [],
+          resource = [],
+          on;
+
+        if (tags && tags.length > 0) {
+          motivation.push("oa:tagging");
+          jQuery.each(tags, function(index, value) {
+            resource.push({
+              "@type": "oa:Tag",
+              "chars": value
+            });
           });
+        }
+        motivation.push("oa:commenting");
+        resource.push({
+          "@type": "dctypes:Text",
+          "format": "text/html",
+          "chars": annoCat
         });
+        return {
+          "@context": "http://iiif.io/api/presentation/2/context.json",
+          "@type": "oa:Annotation",
+          "motivation": motivation,
+          "resource": resource
+        };
       }
-      motivation.push("oa:commenting");
-      resource.push({
-        "@type": "dctypes:Text",
-        "format": "text/html",
-        "chars": resourceText
-      });
-      return {
-        "@context": "http://iiif.io/api/presentation/2/context.json",
-        "@type": "oa:Annotation",
-        "motivation": motivation,
-        "resource": resource
-      };
     },
 
     updateAnnotation: function(oaAnno) {
-      var selectedTags = this.editorContainer.find('.tags-editor').val(),
-        resourceText = tinymce.activeEditor.getContent();
+      var selectedTags = this.editorContainer.find('.tags-editor').val();
+        //resourceText = tinymce.activeEditor.getContent();
 
-      var motivation = [],
-        resource = [];
+      var annoCat = this.editorContainer.find('.anno-cat').val();
+      var annoSel = '';
 
-      //remove all tag-related content in annotation
-      oaAnno.motivation = jQuery.grep(oaAnno.motivation, function(value) {
-        return value !== "oa:tagging";
-      });
-      oaAnno.resource = jQuery.grep(oaAnno.resource, function(value) {
-        return value["@type"] !== "oa:Tag";
-      });
-      //re-add tagging if we have them
-      if (selectedTags.length > 0) {
-        oaAnno.motivation.push("oa:tagging");
-        jQuery.each(selectedTags, function(index, value) {
-          oaAnno.resource.push({
-            "@type": "oa:Tag",
-            "chars": value
+      if (annoCat === 'Please select tag') {
+        alert("Please select a tag to continue");
+        return false;
+      } else {
+        var motivation = [],
+          resource = [];
+
+        //remove all tag-related content in annotation
+        oaAnno.motivation = jQuery.grep(oaAnno.motivation, function(value) {
+          return value !== "oa:tagging";
+        });
+        oaAnno.resource = jQuery.grep(oaAnno.resource, function(value) {
+          return value["@type"] !== "oa:Tag";
+        });
+        //re-add tagging if we have them
+        if (selectedTags && selectedTags.length > 0) {
+          oaAnno.motivation.push("oa:tagging");
+          jQuery.each(selectedTags, function(index, value) {
+            oaAnno.resource.push({
+              "@type": "oa:Tag",
+              "chars": value
+            });
           });
+        }
+        jQuery.each(oaAnno.resource, function(index, value) {
+          if (value["@type"] === "dctypes:Text") {
+            value.chars = annoCat;
+            annoSel     = annoCat;
+          }
         });
       }
-      jQuery.each(oaAnno.resource, function(index, value) {
-        if (value["@type"] === "dctypes:Text") {
-          value.chars = resourceText;
-        }
-      });
     },
 
     editorTemplate: $.Handlebars.compile([
-      '<textarea class="text-editor" placeholder="{{t "comments"}}…">{{#if content}}{{content}}{{/if}}</textarea>',
-      '<select id="tags-editor-{{windowId}}" class="tags-editor" multiple="true">{{#each tags}}',
-      '<option value="{{this}}" {{#ifContains ../selectedTags this }}selected="selected"{{/ifContains}}>{{this}}</option>',
-      '{{/each}}</select>'
+      '<div class="row">',
+        '<div class="col-12 py-2">',
+          '<select id="tags-editor-{{windowId}}" class="anno-cat form-control">{{#each tags}}',
+            '<option value="{{this}}" {{#ifContains ../content this }}selected="selected"{{/ifContains}}>{{this}}</option>',
+          '{{/each}}</select>',
+        '</div>',
+      '</div>',
+      '<div class="row">',
+        '<div class="col-12 py-2">',
+          '<input type="text" id="newTag" class="anno-new-tag form-control"/>',
+        '</div>',
+      '</div>',
+      // '<div class="row">',
+      //   '<div class="col-12 py-2">',
+      //     '<select id="newTagColour" class="anno-colour form-control">{{#each colours}}',
+      //       '<option value="{{this.code}}" style="color:{{this.code}};">{{this.id}}</option>',
+      //     '{{/each}}</select>',
+      //   '</div>',
+      // '</div>',
+      '<div class="row">',
+        '<div class="col-12 py-2">',
+          '<button class="add-tag btn btn-default btn-block" type="button">Add tag</button>',
+        '</div>',
+      '</div>'
     ].join(''))
   };
 

@@ -14,7 +14,25 @@
     </style>
   </head>
   <body>
+    <input type="hidden" name="last-tool" value="" />
     <div id="viewer"></div>
+    <script type="text/javascript">
+      function json2array(json, preserveKeys = false){
+	    var result = [];
+	    var keys = Object.keys(json);
+	    keys.forEach(function(key){
+					if (preserveKeys) {
+						result[key] = json[key];
+					} else {
+						result.push(json[key]);
+					}
+	    });
+	    return result;
+	}
+
+	var availableTags = json2array(["Please Select"]);
+	var tags					=	json2array({"1":"nonDefect_gapDoor","2":"badge","3":"wheel"}, true);
+	  </script>
 
     <script src="build/mirador/mirador.js"></script>
     <script type="text/javascript">
@@ -87,6 +105,17 @@
          },
       });
      });
+
+     window.setTimeout(function(){
+			//$('.mirador-osd-check_box_outline_blank-mode').trigger('click');
+			$('canvas').focus();
+			$('body').on('click', '.mirador-osd-edit-mode', function(){
+				var $control	=	$(this).attr('class').replace(/hud\-control|selected|mirador\-osd\-edit\-mode|\s/gi,'');
+				$('[name=last-tool]').val('.'+$control);
+      });
+		}, 500);
+
+
     </script>
     <!-- This enables live reloading of assets for improved developer experience. -->
     <!-- Remove if copying this page as a basis for another project. -->
