@@ -67,7 +67,8 @@
           title:    $.JsonLd.getTextValue(canvas.label),
           id:       canvas['@id'],
           width:    width,
-          highlight: _this.currentImgIndex === index ? 'highlight' : ''
+          highlight: _this.currentImgIndex === index ? 'highlight' : '',
+          annotated: canvas['thumbnail']['annotations'] > 0 ? 'annotated' : ''
         };
       });
 
@@ -187,8 +188,8 @@
                                  '<div class="{{thumbnailCls}}">',
                                  '<ul class="{{listingCssCls}}" role="list" aria-label="Thumbnails">',
                                  '{{#thumbs}}',
-                                 '<li class="{{highlight}}" role="listitem" aria-label="Thumbnail">',
-                                 '<img class="thumbnail-image {{highlight}}" title="{{title}}" data-image-id="{{id}}" src="" data="{{thumbUrl}}" height="{{../defaultHeight}}" width="{{width}}">',
+                                 '<li class="{{highlight}} {{annotated}}" role="listitem" aria-label="Thumbnail">',
+                                 '<img class="thumbnail-image {{highlight}} {{annotated}}" title="{{title}}" data-image-id="{{id}}" src="" data="{{thumbUrl}}" height="{{../defaultHeight}}" width="{{width}}">',
                                  '<div class="thumb-label">{{title}}</div>',
                                  '</li>',
                                  '{{/thumbs}}',

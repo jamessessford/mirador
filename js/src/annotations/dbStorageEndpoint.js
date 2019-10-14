@@ -301,8 +301,6 @@
   
       getAnnotationList: function(key, options, successCallback, errorCallback) {
         
-        console.log("Am I here?");
-        
         var _this = this;
         var keyc   = key.split('/');
         var _id    = keyc[keyc.length -1];
