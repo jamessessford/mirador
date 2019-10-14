@@ -42,6 +42,10 @@
       });
       tags = tags.concat(selectedTags);
 
+      if (annoText === "") {
+        annoText = jQuery('[name=last-tag]').val();
+      }
+
       this.editorMarkup = this.editorTemplate({
         content: annoText,
         selectedTags : selectedTags,
