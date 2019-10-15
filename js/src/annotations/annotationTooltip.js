@@ -85,7 +85,7 @@
               };
 
               _this.eventEmitter.publish('onAnnotationCreatedCanceled.'+_this.windowId,[cancelCallback,!_this.activeEditor.isDirty()]);
-              jQuery(jQuery('[name=last-tool').val()).trigger('click');
+              jQuery(jQuery('[name=last-tool]').val()).trigger('click');
             });
 
             jQuery(selector + ' a.save').on("click", function(event) {

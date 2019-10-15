@@ -51,7 +51,9 @@
             }
             forEveryActiveView(workspace, function(view){
               view.previous();
+              view.eventEmitter.publish('KEYBOARD_NAVIGATION');
             });
+            
           });
           Mousetrap.bind(['ctrl+left'], function(){
             //console.log('Got key ←, going to previous page.');
@@ -62,7 +64,9 @@
             forEveryActiveView(workspace, function(view){
               // this_.eventEmitter.publish('SET_CURRENT_CANVAS_ID.' + this_.windowId, this_.imagesList[0]['@id']);
               view.eventEmitter.publish('SET_CURRENT_CANVAS_ID.' + view.windowId, view.imagesList[0]['@id']);
+              view.eventEmitter.publish('KEYBOARD_NAVIGATION');
             });
+            //this_.eventEmitter.publish('KEYBOARD_NAVIGATION');
           });
           Mousetrap.bind(['right', 'space'], function(){
             //console.log('Got key → or ␣, going to next page.');
@@ -72,7 +76,9 @@
             }
             forEveryActiveView(workspace, function(view){
               view.next();
+              view.eventEmitter.publish('KEYBOARD_NAVIGATION');
             });
+            //this_.eventEmitter.publish('KEYBOARD_NAVIGATION');
           });
           Mousetrap.bind(['ctrl+right'], function(){
             //console.log('Got key ←, going to previous page.');
@@ -82,7 +88,9 @@
             }
             forEveryActiveView(workspace, function(view){
                view.eventEmitter.publish('SET_CURRENT_CANVAS_ID.' + view.windowId, view.imagesList[view.imagesList.length-1]['@id']);
+               view.eventEmitter.publish('KEYBOARD_NAVIGATION');
             });
+            //this_.eventEmitter.publish('KEYBOARD_NAVIGATION');
           });
           Mousetrap.bind(['enter'], function(){
             //console.log('Got key ↵, toggle fullscreen.');
