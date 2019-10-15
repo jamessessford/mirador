@@ -68,7 +68,8 @@
           id:       canvas['@id'],
           width:    width,
           highlight: _this.currentImgIndex === index ? 'highlight' : '',
-          annotated: canvas['thumbnail']['annotations'] > 0 ? 'annotated' : ''
+          annotated: canvas['thumbnail']['annotations'] > 0 ? 'annotated' : '',
+          uuid: canvas['thumbnail']['uuid']
         };
       });
 
@@ -189,7 +190,7 @@
                                  '<ul class="{{listingCssCls}}" role="list" aria-label="Thumbnails">',
                                  '{{#thumbs}}',
                                  '<li class="{{highlight}} {{annotated}}" role="listitem" aria-label="Thumbnail">',
-                                 '<img class="thumbnail-image {{highlight}} {{annotated}}" title="{{title}}" data-image-id="{{id}}" src="" data="{{thumbUrl}}" height="{{../defaultHeight}}" width="{{width}}">',
+                                 '<img rel={{uuid}} class="thumbnail-image {{highlight}} {{annotated}}" title="{{title}}" data-image-id="{{id}}" src="" data="{{thumbUrl}}" height="{{../defaultHeight}}" width="{{width}}">',
                                  '<div class="thumb-label">{{title}}</div>',
                                  '</li>',
                                  '{{/thumbs}}',
