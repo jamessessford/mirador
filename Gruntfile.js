@@ -20,7 +20,7 @@ module.exports = function(grunt) {
     releaseRoot = '../site-build/built-mirador/',
     // libraries/plugins
     vendors = [
-      'node_modules/jquery/dist/jquery.min.js',
+      //'node_modules/jquery/dist/jquery.min.js',
       'node_modules/jquery-migrate/dist/jquery-migrate.min.js',
       'node_modules/jquery-ui-dist/jquery-ui.min.js',
       'node_modules/bootstrap/js/modal.js',
