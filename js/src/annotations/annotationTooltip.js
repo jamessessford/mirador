@@ -209,14 +209,14 @@
           buttons: {
             'no': {
               label: i18next.t('no'),
-              className: 'btn-default',
+              className: 'btn btn-block secondary-button',
               callback: function() {
                 return;
               }
             },
             'yes': {
               label: i18next.t('yes'),
-              className: 'btn-primary',
+              className: 'btn btn-block secondary-button',
               callback: function() {
                 var display = jQuery(elem).parents('.annotation-display');
                 var id = display.attr('data-anno-id');

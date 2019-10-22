@@ -23,6 +23,9 @@
         jQuery(el).css('z-index',zIndex);
         // workaround because bootstap does not support external configuration for backdrop parent
         jQuery('.modal-backdrop').prependTo(_this.container).css('z-index',zIndex);
+        window.setTimeout(function(){
+          jQuery(el).addClass('show');
+        }, 275);
       });
       jQuery(el).on('hidden.bs.modal',function(){
         jQuery('.modal-backdrop').remove();
